@@ -34,9 +34,14 @@ def index():
 def hello(name):
     user = User.query.filter_by(name=name).first()
     if user:
-        bucket_name = 'alexbucket222'
-        filename = '200w.gif'
-        file_url = f'https://{bucket_name}.s3.amazonaws.com/{filename}'
+        # bucket_name = 'alexbucket222'
+        # filename = '200w.gif'
+        # file_url = f'https://{bucket_name}.s3.amazonaws.com/{filename}'
+        # return render_template('hello.html', name=name, file_url=file_url)
+        file_url = s3.generate_presigned_url('get_object',
+                                            Params={'Bucket': os.getenv("BUCKET_NAME"),
+                                                    'Key': os.getenv("IMAGE_NAME")})
+        print(file_url)
         return render_template('hello.html', name=name, file_url=file_url)
     return 'User not found', 404
 
